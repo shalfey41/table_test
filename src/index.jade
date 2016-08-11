@@ -6,5 +6,10 @@ html(lang="ru")
   body
     include blocks/browser-warning/browser-warning
 
+    main.main
+      .main__container
+        form.search-form#searchForm
+          input.search-form__input(type="search", name="search", placeholder="Искать в таблице")
+        #table
 
     include blocks/js-script/js-script

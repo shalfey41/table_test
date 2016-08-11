@@ -1,2 +1,73 @@
 @import "includes/normalize";
 @import "includes/variables";
+
+.main {
+  padding-top: 30px;
+  padding-bottom: 70px;
+
+  &__container {
+    max-width: 1248px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+}
+
+.table {
+  width: 760px;
+  border-collapse: collapse;
+  margin-bottom: 35px;
+
+  td {
+    width: 190px;
+    padding: 15px 15px 14px 10px;
+    box-sizing: border-box;
+  }
+
+  &__thead {
+    td {
+      font-weight: bold;
+    }
+  }
+
+  &__row {
+    &:hover {
+      background-color: #ebebeb;
+    }
+  }
+}
+
+.search-form {
+  display: inline-block;
+  margin-bottom: 20px;
+
+  &__input {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #9c9c9c;
+    box-sizing: border-box;
+  }
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  align-items: center;
+
+  &:before {
+    content: "Страницы";
+    margin-right: 18px;
+  }
+
+  &__item {
+    margin-right: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #ebebeb;
+
+    &:hover,
+    &.active {
+      background-color: #cacaca;
+    }
+  }
+}
