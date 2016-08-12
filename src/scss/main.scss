@@ -12,15 +12,27 @@
   }
 }
 
+.table-container {
+  margin-bottom: 50px;
+}
+
 .table {
   width: 760px;
   border-collapse: collapse;
-  margin-bottom: 35px;
+
+  @media(max-width: 780px) {
+    width: 100%;
+    max-width: 550px;
+  }
 
   td {
     width: 190px;
     padding: 15px 15px 14px 10px;
     box-sizing: border-box;
+
+    @media(max-width: 780px) {
+      width: 25%;
+    }
   }
 
   &__thead {
