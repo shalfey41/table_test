@@ -244,6 +244,8 @@
 
       searchVal = searchVal.toLowerCase();
 
+      searchVal = searchVal.trim();
+
       self.loadFromBase(0, searchVal);
     });
   }
