@@ -20,8 +20,7 @@
       xhr.timeout = 10000;
 
       xhr.onload = function(e) {
-        var dataTarget = e.target.pesponse || e.srcElement.response,
-            data = JSON.parse(e.target.response);
+        var data = JSON.parse(e.target.response);
 
         loadTableInDom(data, pageFrom, searchValue);
       };
