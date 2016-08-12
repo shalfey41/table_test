@@ -225,7 +225,9 @@
       }
 
       Array.prototype.forEach.call(paginationItems, function(item) {
-        item.classList.remove('active');
+        if (clickedElement.classList.contains('pagination__item')) {
+          item.classList.remove('active');
+        }
       });
 
       if (clickedElement.classList.contains('pagination__item')) {
