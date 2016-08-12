@@ -7,7 +7,7 @@
 
 
   // Загрузка данных из базы и отрисовка таблицы
-  function loadFromBase(pageFrom) {
+  function loadFromBase(pageFrom, searchValue) {
     // Загружаем базу
     var xhr = new XMLHttpRequest();
 
@@ -18,7 +18,7 @@
     xhr.onload = function(e) {
       var data = JSON.parse(e.target.response);
 
-      loadTableInDom(data, pageFrom);
+      loadTableInDom(data, pageFrom, searchValue);
     };
 
     xhr.send();
@@ -26,7 +26,7 @@
 
 
   // Строит и заполняет таблицу в памяти
-  function fillTable(loadedData, pageFrom) {
+  function fillTable(loadedData, pageFrom, searchValue) {
     // Удаляем события, если есть
     var paginationList = document.querySelector('.pagination');
     if (paginationList !== null) {
@@ -72,12 +72,33 @@
       }
     }
 
-    // Заполняем таблицу данными из базы
     table.appendChild(tbody);
 
-    var showedDate = loadedData.slice(itemsFrom, itemsTo);
+    // Фильтрация массива через поиск
+    if (searchValue !== undefined) {
+      var searchVal = searchValue;
 
-    showedDate.forEach(function(item) {
+      var filterData = loadedData.filter(function(item) {
+        var dataObject = Object.keys(item);
+
+        for (var i = 0; i < dataObject.length; i++) {
+          var valInBase = item[dataObject[i]].toString();
+
+          valInBase = valInBase.toLowerCase();
+
+          if (valInBase.indexOf(searchVal) !== -1) {
+            return item;
+          }
+        }
+      });
+    } else {
+      var filterData = loadedData.slice(0);
+    }
+
+    // Заполняем таблицу данными из базы
+    var showedData = filterData.slice(itemsFrom, itemsTo);
+
+    showedData.forEach(function(item) {
       var cloneTr = tr.cloneNode(),
           dataObject = Object.keys(item);
 
@@ -94,14 +115,16 @@
     fragment.appendChild(table);
 
     // Выводим пагинацию, если надо
-    var getPagination = setPagination(ITEMS_ON_PAGE, loadedData);
+    if (filterData.length > ITEMS_ON_PAGE) {
+      var getPagination = setPagination(ITEMS_ON_PAGE, filterData);
 
-    if (getPagination !== false) {
-      fragment.appendChild(getPagination);
+      if (getPagination !== false) {
+        fragment.appendChild(getPagination);
 
-      var paginationItems = fragment.querySelectorAll('.pagination__item');
+        var paginationItems = fragment.querySelectorAll('.pagination__item');
 
-      paginationItems[pageFrom].classList.add('active');
+        paginationItems[pageFrom].classList.add('active');
+      }
     }
 
     return fragment;
@@ -137,11 +160,11 @@
 
 
   // Берет таблицу из базы и заполняет DOM
-  function loadTableInDom(loadedData, pageFrom) {
+  function loadTableInDom(loadedData, pageFrom, searchValue) {
     var container = document.getElementById('table');
 
     // Строим и заполняем фрагмент
-    var setFragment = fillTable(loadedData, pageFrom);
+    var setFragment = fillTable(loadedData, pageFrom, searchValue);
 
     // Загружаем фрагмент в DOM
     container.appendChild(setFragment);
@@ -154,7 +177,9 @@
   function paginationEvents() {
     var paginationList = document.querySelector('.pagination');
 
-    paginationList.addEventListener('click', _setPaginationEvent);
+    if (paginationList !== null) {
+      paginationList.addEventListener('click', _setPaginationEvent);
+    }
   }
 
 
@@ -171,4 +196,17 @@
       loadFromBase(clickedElement.textContent - 1);
     }
   }
+
+  // События поиска
+  var searchInput = document.getElementById('searchInput');
+
+  searchInput.addEventListener('keyup', function(e) {
+    var searchVal = this.value;
+
+    searchVal.toString();
+
+    searchVal = searchVal.toLowerCase();
+
+    loadFromBase(0, searchVal);
+  });
 })();
