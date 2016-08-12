@@ -20,7 +20,8 @@
       xhr.timeout = 10000;
 
       xhr.onload = function(e) {
-        var data = JSON.parse(e.target.response);
+        var dataTarget = e.target.pesponse || e.srcElement.response,
+            data = JSON.parse(e.target.response);
 
         loadTableInDom(data, pageFrom, searchValue);
       };
@@ -216,14 +217,14 @@
 
     // Обработка клика в пагинации
     function _setPaginationEvent(e) {
-      var clickedElement = e.target,
+      var clickedElement = e.target || e.srcElement,
           paginationItems = this.querySelectorAll('.pagination__item');
 
       if (clickedElement.classList.contains('active')) {
         return;
       }
 
-      paginationItems.forEach(function(item) {
+      Array.prototype.forEach.call(paginationItems, function(item) {
         item.classList.remove('active');
       });
 
